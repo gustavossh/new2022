@@ -1,4 +1,4 @@
-# INSTALAR OU ATUALIZAR PAINELWEB MULTIHD-SSH DEBIAN 8, UBUNTU 14 E UBUNTU 18! ATUALIZAÇÃO 21/05/2022.
+# INSTALAR OU ATUALIZAR PAINELWEB SSH-NET DEBIAN 8, UBUNTU 14 E UBUNTU 18! ATUALIZAÇÃO 30/08/2022.
 ```
 apt install wget -y; bash <(wget -qO- https://raw.githubusercontent.com/gustavossh/new2022/main/Painel-V2022/instpainel.sh)
 ```
