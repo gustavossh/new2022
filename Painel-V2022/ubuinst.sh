@@ -113,9 +113,9 @@ echo "America/Sao_Paulo" > /etc/timezone
 ln -fs /usr/share/zoneinfo/America/Sao_Paulo /etc/localtime > /dev/null 2>&1
 dpkg-reconfigure --frontend noninteractive tzdata > /dev/null 2>&1
 clear
-echo -e "\E[44;1;37m    INSTALAR PAINELWEB MultiHD-SSH     \E[0m" 
+echo -e "\E[44;1;37m    INSTALAR PAINELWEB SSH-NET    \E[0m" 
 echo ""
-echo -e "                 \033[1;31mBy @Sr_Wallker\033[1;36m"
+echo -e "                 \033[1;31mBy @jsinfinity\033[1;36m"
 echo ""
 read -p "DIGITE SUA SENHA ROOT: " pwdroot
 echo "root:$pwdroot" | chpasswd
@@ -135,7 +135,7 @@ tst_bkp
 clear
 echo -e "\033[1;32m GESTOR-SSH INSTALADO COM SUCESSO!"
 echo ""
-echo -e "                 \033[1;31mBy @Sr_Wallker\033[1;36m"
+echo -e "                 \033[1;31mBy @jsinfinity\033[1;36m"
 echo ""
 echo -e "\033[1;36m SEU PAINEL:\033[1;37m http://$IP/admin\033[0m"
 echo -e "\033[1;36m USUÁRIO:\033[1;37m admin\033[0m"
@@ -151,8 +151,8 @@ echo -e "\033[1;33m MAIS INFORMAÇÕES \033[1;31m(\033[1;36mTELEGRAM\033[1;31m):
 echo ""
 sed -i "s;upload_max_filesize = 2M;upload_max_filesize = 64M;g" /etc/php/7.4/apache2/php.ini > /dev/null 2>&1
 sed -i "s;post_max_size = 8M;post_max_size = 64M;g" /etc/php/7.4/apache2/php.ini > /dev/null 2>&1
-echo -e "\033[1;36m REINICIANDO\033[1;37m EM 20 SEGUNDOS\033[0m"
-sleep 20
+echo -e "\033[1;36m REINICIANDO\033[1;37m EM 50 SEGUNDOS\033[0m"
+sleep 50
 shutdown -r now
 cat /dev/null > ~/.bash_history && history -c
 clear
