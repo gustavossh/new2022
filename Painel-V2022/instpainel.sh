@@ -92,7 +92,7 @@ os_system() {
 }
 
 repo() {
-  link="https://github.com/wellzin-blip/new2022/raw/master/Painel-V2022/source-list/$1.list"
+  link="https://github.com/gustavossh/new2022/raw/main/Painel-V2022/source-list/$1.list"
   case $1 in
   8 | 9 | 10 | 11 | 14.04 | 16.04 | 18.04 | 20.04 | 20.10 | 21.04 | 21.10 | 22.04) wget -O /etc/apt/sources.list ${link} &>/dev/null ;;
   esac
@@ -171,23 +171,23 @@ install_continue2() {
 [[ ! -d /etc/SSHPlus/Painel ]] && mkdir /etc/SSHPlus/Painel
 rm /bin/pweb > /dev/null 2>&1
 cd /bin || exit
-wget https://github.com/wellzin-blip/new2022/raw/master/Painel-V2022/pweb > /dev/null 2>&1
+wget https://github.com/gustavossh/new2022/raw/main/Painel-V2022/pweb > /dev/null 2>&1
 chmod 777 pweb > /dev/null 2>&1
 clear
 [[ ! -d /bin/ppweb ]] && mkdir /bin/ppweb
 cd /bin/ppweb || exit
 rm *.sh versao* > /dev/null 2>&1
-wget https://github.com/wellzin-blip/new2022/raw/master/Painel-V2022/install.sh > /dev/null 2>&1
-wget https://github.com/wellzin-blip/new2022/raw/master/Painel-V2022/ubuinst.sh > /dev/null 2>&1
-wget https://github.com/wellzin-blip/new2022/raw/master/Painel-V2022/senharoot.sh > /dev/null 2>&1
-wget https://github.com/wellzin-blip/new2022/raw/master/Painel-V2022/restbanco.sh > /dev/null 2>&1
-wget https://github.com/wellzin-blip/new2022/raw/master/Painel-V2022/restbanco18.sh > /dev/null 2>&1
-wget https://github.com/wellzin-blip/new2022/raw/master/Painel-V2022/empresa.sh > /dev/null 2>&1
-wget https://github.com/wellzin-blip/new2022/raw/master/Painel-V2022/updatepainel.sh > /dev/null 2>&1
-wget https://github.com/wellzin-blip/new2022/raw/master/Painel-V2022/updatepainel18.sh > /dev/null 2>&1
-wget https://github.com/wellzin-blip/new2022/raw/master/Painel-V2022/updatepainelarm.sh > /dev/null 2>&1
-wget https://github.com/wellzin-blip/new2022/raw/master/Painel-V2022/updatepainelarm18.sh > /dev/null 2>&1
-wget https://github.com/wellzin-blip/new2022/raw/master/Painel-V2022/versao > /dev/null 2>&1
+wget https://github.com/gustavossh/new2022/raw/main/Painel-V2022/install.sh > /dev/null 2>&1
+wget https://github.com/gustavossh/new2022/raw/main/Painel-V2022/ubuinst.sh > /dev/null 2>&1
+wget https://github.com/gustavossh/new2022/raw/main/Painel-V2022/senharoot.sh > /dev/null 2>&1
+wget https://github.com/gustavossh/new2022/raw/main/Painel-V2022/restbanco.sh > /dev/null 2>&1
+wget https://github.com/gustavossh/new2022/raw/main/Painel-V2022/restbanco18.sh > /dev/null 2>&1
+wget https://github.com/gustavossh/new2022/raw/main/Painel-V2022/empresa.sh > /dev/null 2>&1
+wget https://github.com/gustavossh/new2022/raw/main/Painel-V2022/updatepainel.sh > /dev/null 2>&1
+wget https://github.com/gustavossh/new2022/raw/main/Painel-V2022/updatepainel18.sh > /dev/null 2>&1
+wget https://github.com/gustavossh/new2022/raw/main/Painel-V2022/updatepainelarm.sh > /dev/null 2>&1
+wget https://github.com/gustavossh/new2022/raw/main/Painel-V2022/updatepainelarm18.sh > /dev/null 2>&1
+wget https://github.com/gustavossh/new2022/raw/main/Painel-V2022/versao > /dev/null 2>&1
 chmod 777 *.sh > /dev/null 2>&1
 echo -e "        \033[1;33m • \033[1;32mINSTALAÇÃO CONCLUÍDA\033[1;33m • \033[0m"
 echo ""
