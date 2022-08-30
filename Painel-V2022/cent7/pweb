@@ -45,17 +45,17 @@ fun_atpweb () {
     rm /bin/pweb > /dev/null 2>&1
     sleep 5
     cd /bin || exit
-    wget https://github.com/gustavossh/plusnssh/raw/ntech/gestorssh/cent7/pweb > /dev/null 2>&1
+    wget https://github.com/gustavossh/new2022/raw/ntech/gestorssh/cent7/pweb > /dev/null 2>&1
     chmod 777 pweb > /dev/null 2>&1
     clear
     mkdir /bin/ppweb > /dev/null 2>&1
 cd /bin/ppweb || exit
 rm *.sh > /dev/null 2>&1
-wget https://github.com/gustavossh/plusnssh/raw/ntech/gestorssh/cent7/instcent7.sh > /dev/null 2>&1
-wget https://github.com/gustavossh/plusnssh/raw/ntech/gestorssh/cent7/senharoot.sh > /dev/null 2>&1
-wget https://github.com/gustavossh/plusnssh/raw/ntech/gestorssh/cent7/restbanco.sh > /dev/null 2>&1
-wget https://github.com/gustavossh/plusnssh/raw/ntech/gestorssh/cent7/empresa.sh > /dev/null 2>&1
-wget https://github.com/gustavossh/plusnssh/raw/ntech/gestorssh/cent7/updatepainel.sh > /dev/null 2>&1
+wget https://github.com/gustavossh/new2022/raw/ntech/gestorssh/cent7/instcent7.sh > /dev/null 2>&1
+wget https://github.com/gustavossh/new2022/raw/ntech/gestorssh/cent7/senharoot.sh > /dev/null 2>&1
+wget https://github.com/gustavossh/new2022/raw/ntech/gestorssh/cent7/restbanco.sh > /dev/null 2>&1
+wget https://github.com/gustavossh/new2022/raw/ntech/gestorssh/cent7/empresa.sh > /dev/null 2>&1
+wget https://github.com/gustavossh/new2022/raw/ntech/gestorssh/cent7/updatepainel.sh > /dev/null 2>&1
 chmod -R 777 /bin/ppweb > /dev/null 2>&1
 clear
 }
