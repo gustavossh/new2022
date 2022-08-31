@@ -1,31 +1,4 @@
 #!/bin/bash
-fun_bar () {
-comando[0]="$1"
-comando[1]="$2"
- (
-[[ -e $HOME/fim ]] && rm $HOME/fim
-[[ ! -e /usr/lib/sshplus ]] && rm -rf /bin/menu > /dev/null 2>&1
-${comando[0]} -y > /dev/null 2>&1
-${comando[1]} -y > /dev/null 2>&1
-touch $HOME/fim
- ) > /dev/null 2>&1 &
- tput civis
-echo -ne "\033[1;33m["
-while true; do
-   for((i=0; i<18; i++)); do
-   echo -ne "\033[1;31m#"
-   sleep 0.1s
-   done
-   [[ -e $HOME/fim ]] && rm $HOME/fim && break
-   echo -e "\033[1;33m]"
-   sleep 1s
-   tput cuu1
-   tput dl1
-   echo -ne "\033[1;33m["
-done
-echo -e "\033[1;33m]\033[1;37m -\033[1;32m OK !\033[1;37m"
-tput cnorm
-}
 fun_prog ()
 {
     comando[0]="$1" 
@@ -43,49 +16,16 @@ fun_prog ()
     tput cnorm
     echo -e "\e[1DOK"
 }
-print_center() {
-  if [[ -z $2 ]]; then
-    text="$1"
-  else
-    col="$1"
-    text="$2"
-  fi
-
-  while read line; do
-    unset space
-    x=$(((54 - ${#line}) / 2))
-    for ((i = 0; i < $x; i++)); do
-      space+=' '
-    done
-    space+="$line"
-    if [[ -z $2 ]]; then
-      msg -azu "$space"
-    else
-      msg "$col" "$space"
-    fi
-  done <<<$(echo -e "$text")
-}
-time_reboot() {
-  print_center -ama "REINICIAR VPS EM $1 SEGUNDOS"
-  REBOOT_TIMEOUT="$1"
-
-  while [ $REBOOT_TIMEOUT -gt 0 ]; do
-    print_center -ne "-$REBOOT_TIMEOUT-\r"
-    sleep 1
-    : $((REBOOT_TIMEOUT--))
-  done
-  reboot
-}
-if [[ "$(grep -c "Ubuntu" /etc/issue.net)" = "1" ]]; then
-system=$(cut -d' ' -f1 /etc/issue.net)
+if [[ "$(grep -c "CentOS" /etc/centos-release)" = "1" ]]; then
+system=$(cut -d' ' -f1 /etc/centos-release)
 system+=$(echo ' ')
-system+=$(cut -d' ' -f2 /etc/issue.net |awk -F "." '{print $1}')
-elif [[ "$(grep -c "Debian" /etc/issue.net)" = "1" ]]; then
-system=$(cut -d' ' -f1 /etc/issue.net)
+system+=$(cut -d' ' -f2 /etc/centos-release |awk -F "." '{print $1}')
+elif [[ "$(grep -c "Debian" /etc/centos-release)" = "1" ]]; then
+system=$(cut -d' ' -f1 /etc/centos-release)
 system+=$(echo ' ')
-system+=$(cut -d' ' -f3 /etc/issue.net)
+system+=$(cut -d' ' -f3 /etc/centos-release)
 else
-system=$(cut -d' ' -f1 /etc/issue.net)
+system=$(cut -d' ' -f1 /etc/centos-release)
 fi
 _ons=$(ps -x | grep sshd | grep -v root | grep priv | wc -l)
 _ram=$(printf ' %-9s' "$(free -h | grep -i mem | awk {'print $2'})")
@@ -93,110 +33,36 @@ _usor=$(printf '%-8s' "$(free -m | awk 'NR==2{printf "%.2f%%", $3*100/$2 }')")
 _usop=$(printf '%-5s' "$(top -bn1 | awk '/Cpu/ { cpu = "" 100 - $8 "%" }; END { print cpu }')")
 _core=$(printf '%-5s' "$(grep -c cpu[0-9] /proc/stat)")
 _system=$(printf '%-14s' "$system")
-_hora=$(printf '%(%H:%M:%S)T')
-autm=$(grep "pweb;" /etc/profile > /dev/null && echo -e "\033[1;32m ON ◉" || echo -e "\033[1;31mOFF ○")
+_hora=$(date +%H:%M:%S)
 fun_update () {
-    apt-get update -y > /dev/null 2>&1
+    yum update -y > /dev/null 2>&1
 }
 
 fun_upgrade () {
-    apt-get upgrade -y > /dev/null 2>&1
+    yum upgrade -y > /dev/null 2>&1
 }
 fun_atpweb () {
-    bash <(wget -qO- raw.githubusercontent.com/gustavossh/new2022/main/Painel-V2022/instpainel.sh)
+    rm /bin/pweb > /dev/null 2>&1
+    sleep 5
+    cd /bin || exit
+    wget https://github.com/gustavossh/new2022/raw/ntech/gestorssh/cent7/pweb > /dev/null 2>&1
+    chmod 777 pweb > /dev/null 2>&1
+    clear
+    mkdir /bin/ppweb > /dev/null 2>&1
+cd /bin/ppweb || exit
+rm *.sh > /dev/null 2>&1
+wget https://github.com/gustavossh/new2022/raw/ntech/gestorssh/cent7/instcent7.sh > /dev/null 2>&1
+wget https://github.com/gustavossh/new2022/raw/ntech/gestorssh/cent7/senharoot.sh > /dev/null 2>&1
+wget https://github.com/gustavossh/new2022/raw/ntech/gestorssh/cent7/restbanco.sh > /dev/null 2>&1
+wget https://github.com/gustavossh/new2022/raw/ntech/gestorssh/cent7/empresa.sh > /dev/null 2>&1
+wget https://github.com/gustavossh/new2022/raw/ntech/gestorssh/cent7/updatepainel.sh > /dev/null 2>&1
+chmod -R 777 /bin/ppweb > /dev/null 2>&1
+clear
 }
-autoexec () {
-   if grep "pweb;" /etc/profile > /dev/null; then
-      clear
-      echo -e "\033[1;32mDESATIVANDO AUTO EXECUÇÃO DO PWEB\033[0m"
-      offautpweb () {
-         sed -i '/pweb;/d' /etc/profile
-      }
-      echo ""
-      fun_bar 'offautpweb'
-      echo ""
-      echo -e "\033[1;31mAUTO EXECUÇÃO DESATIVADO!\033[0m"
-      sleep 1.5s
-      pweb
-   else
-      clear
-      echo -e "\033[1;32mATIVANDO AUTO EXECUÇÃO DO PWEB\033[0m"
-      autpweb () {
-         grep -v "^pweb;" /etc/profile > /tmp/tmpass && mv /tmp/tmpass /etc/profile
-         echo "pweb;" >> /etc/profile
-      }
-      echo ""
-      fun_bar 'autpweb'
-      echo ""
-      echo -e "\033[1;32mAUTO EXECUÇÃO ATIVADO!\033[0m"
-      sleep 1.5s
-      pweb
-   fi
 
-}
-velocity () {
-aguarde () {
-comando[0]="$1"
-comando[1]="$2"
- (
-[[ -e $HOME/fim ]] && rm $HOME/fim
-[[ ! -d /etc/SSHPlus ]] && rm -rf /bin/menu
-${comando[0]} > /dev/null 2>&1
-${comando[1]} > /dev/null 2>&1
-touch $HOME/fim
- ) > /dev/null 2>&1 &
- tput civis
-echo -ne "\033[1;33mAGUARDE \033[1;37m- \033[1;33m["
-while true; do
-   for((i=0; i<18; i++)); do
-   echo -ne "\033[1;31m#"
-   sleep 0.1s
-   done
-   [[ -e $HOME/fim ]] && rm $HOME/fim && break
-   echo -e "\033[1;33m]"
-   sleep 1s
-   tput cuu1
-   tput dl1
-   echo -ne "\033[1;33mAGUARDE \033[1;37m- \033[1;33m["
-done
-echo -e "\033[1;33m]\033[1;37m -\033[1;32m OK !\033[1;37m "
-tput cnorm
-}
-fun_tst () {
-wget https://github.com/gustavossh/new2022/raw/main/Painel-V2022/speedtest-cli -O speedtest2
-chmod +x speedtest2
-mv speedtest2 /usr/bin/speedtest2
-speedtest2 --share > speed
-}
-echo ""
-echo -e "\033[1;37m◆═════════════════════════════════════════════════════════════◆\033[0m"
-echo -e " \E[44;1;37m              🚀 TESTE DE VELOCIDADE DA VPS 🚀               \E[0m"
-echo -e "\033[1;37m◆═════════════════════════════════════════════════════════════◆\033[0m"
-echo ""
-aguarde 'fun_tst'
-echo ""
-png=$(cat speed | sed -n '5 p' |awk -F : {'print $NF'})
-down=$(cat speed | sed -n '7 p' |awk -F :  {'print $NF'})
-upl=$(cat speed | sed -n '9 p' |awk -F :  {'print $NF'})
-lnk=$(cat speed | sed -n '10 p' |awk {'print $NF'})
-host=$(cat speed | sed -n '2 p' |awk -F :  {'print $NF'})
-echo -e "\033[1;37m═══════════════════════════════════════════════════════════════\033[0m"
-echo -e "\033[1;32mHOST SERVER:\033[1;37m$host"
-echo ""
-echo -e "\033[1;32mPING (LATÊNCIA):\033[1;37m$png"
-echo ""
-echo -e "\033[1;32mDOWNLOAD:\033[1;37m$down"
-echo ""
-echo -e "\033[1;32mUPLOAD:\033[1;37m$upl"
-echo ""
-echo -e "\033[1;32mLINK: \033[1;36m$lnk\033[0m"
-echo ""
-echo -e "\033[1;37m═══════════════════════════════════════════════════════════════\033[0m"
-rm -rf $HOME/speed
-}
 fun_limpiarepositorios () {
 ##LIMPA ROOT
-rm -rf /root/*.sh* > /dev/null 2>&1
+rm -rf /root/*.sh*
 ##LIMPA HTML
 rm -rf /var/www/html
 [[ ! -d /var ]] && mkdir /var
@@ -206,114 +72,13 @@ rm -rf /var/www/html
 
 ##INSTALAR PAINEL
 painel_inst () {
-echo ""
-echo ""  
-echo -e "\033[1;36mSELECIONE O SISTEMA DE SUA VPS: \033[1;37m"
-echo ""
-echo -e "[1] - UBUNTU 18"
-echo ""
-echo -e "[2] - DEBIAN 8 OU UBUNTU 14"
-echo ""
-echo -ne "\033[1;36mOpção: \033[1;37m"
-read resposta
-if [[ "$resposta" = '1' ]]; then
-    /bin/ppweb/ubuinst.sh
-elif [[ "$resposta" = '2' ]]; then
-/bin/ppweb/install.sh
-    else
- echo ""
-    echo -e "\033[1;31mOpção inválida !\033[0m"
-    sleep 1
-    pweb
-fi
+    /bin/ppweb/instcent7.sh
 }
 painel_att () {
-    echo ""
-echo ""
-echo -e "\033[1;36mSELECIONE QUAL SISTEMA QUE QUER ATUALIZAR: \033[1;37m"
-echo ""
-echo -e "[1] - PAINEL WEB NO UBUNTU 18"
-echo ""
-echo -e "[2] - PAINEL WEB NO DEBIAN 8 OU UBUNTU 14"
-echo ""
-echo -ne "\033[1;36mOpção: \033[1;37m"
-read resposta
-if [[ "$resposta" = '1' ]]; then
-    painel_att18
-elif [[ "$resposta" = '2' ]]; then
-painel_att14
-    else
- echo ""
-    echo -e "\033[1;31mOpção inválida !\033[0m"
-    sleep 1
-    pweb
-fi
-}
-painel_att18 () {
-    echo ""
-echo ""
-echo -e "\033[1;36mSELECIONE O MODO COMPATÍVEL CONFORME SUA VPS SSH: \033[1;37m"
-echo ""
-echo -e "[1] - VPS SSH PADRÃO X86_64"
-echo ""
-echo -e "[2] - VPS SSH NA AMPERE ARM"
-echo ""
-echo -ne "\033[1;36mOpção: \033[1;37m"
-read resposta
-if [[ "$resposta" = '1' ]]; then
-    /bin/ppweb/updatepainel18.sh
-elif [[ "$resposta" = '2' ]]; then
-/bin/ppweb/updatepainelarm18.sh
-    else
- echo ""
-    echo -e "\033[1;31mOpção inválida !\033[0m"
-    sleep 1
-    pweb
-fi
-}
-painel_att14 () {
-    echo ""
-echo ""
-echo -e "\033[1;36mSELECIONE O MODO COMPATÍVEL CONFORME SUA VPS SSH: \033[1;37m"
-echo ""
-echo -e "[1] - VPS SSH PADRÃO X86_64"
-echo ""
-echo -e "[2] - VPS SSH NA AMPERE ARM"
-echo ""
-echo -ne "\033[1;36mOpção: \033[1;37m"
-read resposta
-if [[ "$resposta" = '1' ]]; then
     /bin/ppweb/updatepainel.sh
-elif [[ "$resposta" = '2' ]]; then
-/bin/ppweb/updatepainelarm.sh
-    else
- echo ""
-    echo -e "\033[1;31mOpção inválida !\033[0m"
-    sleep 1
-    pweb
-fi
 }
 painel_rest () {
-echo ""
-echo ""
-echo -e "\033[1;36mSELECIONE QUAL SISTEMA QUE QUER RESTAURAR O SQL: \033[1;37m"
-echo ""
-echo -e "[1] - PAINEL WEB NO UBUNTU 18"
-echo ""
-echo -e "[2] - PAINEL WEB NO DEBIAN 8 OU UBUNTU 14"
-echo ""
-echo -ne "\033[1;36mOpção: \033[1;37m"
-read resposta
-if [[ "$resposta" = '1' ]]; then
-    /bin/ppweb/restbanco18.sh
-elif [[ "$resposta" = '2' ]]; then
-/bin/ppweb/restbanco.sh
-    else
- echo ""
-    echo -e "\033[1;31mOpção inválida !\033[0m"
-    sleep 1
-    pweb
-fi
+    /bin/ppweb/restbanco.sh
 }
 painel_empresa () {
     /bin/ppweb/empresa.sh
@@ -329,17 +94,34 @@ echo -e "\033[1;32m SEMPRE CONFIRME COM \033[1;37mY"
 echo -e "\033[1;32m PROSSIGA COM \033[1;37mENTER"
 sleep 7
 service apache2 stop
-apt-get purge mysql-server mysql-client mysql-common mysql-server-core-* mysql-client-core-*
+yum purge mysql-server mysql-client mysql-common mysql-server-core-* mysql-client-core-*
 rm -rf /etc/mysql /var/lib/mysql
 rm -rf /var/www/html
-apt-get autoremove
-apt-get autoclean
+yum autoremove
+yum install apache2 -y >/dev/null
 sed -i "s;Listen 80;Listen 81;g" /etc/apache2/ports.conf
-service apache2 restart > /dev/null 2>&1
+service apache2 restart
 service apache2 stop
 [[ ! -d /var/www ]] && mkdir /var/www
 [[ ! -d /var/www/html ]] && mkdir /var/www/html
 echo -e "\033[1;36mPAINEL REMOVIDO COM ÊXITO \033[1;32m[!OK]"
+pweb
+}
+
+##CLEAN HTML FOLDER
+clean_htmlfolder () {
+clear
+echo -e "\E[41;1;37m         OTIMIZANDO A PASTA HTML PARA INSTALAÇÃO        \E[0m"
+echo -e " "
+echo -ne "\033[1;33m[\033[1;31m ! \033[1;33m] \033[1;31mATUALIZANDO"; fun_prog 'fun_update'
+echo -e " "
+echo -ne "\033[1;33m[\033[1;31m ! \033[1;33m] \033[1;31mOTIMIZANDO"; fun_prog 'fun_upgrade'
+echo -e " "
+echo -ne "\033[1;33m[\033[1;31m ! \033[1;33m] \033[1;31mLIMPANDO PASTA HTML"; fun_prog 'fun_limpiarepositorios'
+echo -e " "
+echo -ne "\033[1;33m[\033[1;31m ! \033[1;33m] \033[1;31mRETORNANDO"; fun_prog 'sleep 3'
+sleep 1
+echo -e " "
 pweb
 }
 att_pweb () {
@@ -358,33 +140,29 @@ pweb
 while true $x != "ok"
 do
 #
-ver=$(cat /bin/ppweb/versao) > /dev/null 2>&1
-IP=$(wget -qO- ipv4.icanhazip.com) > /dev/null 2>&1
+IP=$(wget -qO- ipv4.icanhazip.com)
 echo "America/Sao_Paulo" > /etc/timezone > /dev/null 2>&1
 ln -fs /usr/share/zoneinfo/America/Sao_Paulo /etc/localtime > /dev/null 2>&1
 dpkg-reconfigure --frontend noninteractive tzdata > /dev/null 2>&1
 clear
 echo -e "\033[1;37m┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓\033[0m"
-echo -e "\033[1;37m┃                       \033[38;5;118mPAINEL \033[38;5;190mSSH-\033[38;5;197m-\033[38;5;164mNE\033[38;5;203mT\033[38;5;197m\033[1;37m                        ┃\E[0m"
+echo -e "\033[1;37m┃                       \033[38;5;118mPAINEL \033[38;5;190mssh\033[38;5;197m-\033[38;5;164mNE\033[38;5;203mT\033[38;5;197m\033[1;37m                      ┃\E[0m"
 echo -e "\033[1;37m┣━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┫\033[0m"
 echo -e "\033[1;37m┃\033[38;5;82mSISTEMA              \033[1;37m| \033[38;5;82mMEMÓRIA RAM           \033[1;37m| \033[38;5;82mPROCESSADOR    \033[1;37m┃"
 echo -e "┃\033[38;5;196mOS: \033[1;37m$_system   | \033[38;5;196mTOTAL:\033[1;37m$_ram      | \033[38;5;196mNUCLEO: \033[1;37m$_core\033[0m  \033[1;37m┃"
 echo -e "┃\033[38;5;196mHORÁRIO: \033[1;37m$_hora    | \033[38;5;196mEM USO: \033[1;37m$_usor      | \033[38;5;196mEM USO: \033[1;37m$_usop\033[0m  \033[1;37m┃"
 echo -e "\033[1;37m┣━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┫\033[0m"
-echo -e "\033[1;37m┃\033[1;31m[\033[1;36m01\033[1;31m] \033[1;37m• \033[1;37mINSTALAR PAINEL SSH-NET\033[1;32m        FINAL 30/08/2022   \033[1;37m┃"
-echo -e "┃\033[1;31m[\033[1;36m02\033[1;31m] \033[1;37m• \033[1;37mATUALIZAR PAINEL SSH-NET  \033[1;31m        BETA 30/08/2022   \033[1;37m┃"
-echo -e "┃\033[1;31m[\033[1;36m03\033[1;31m] \033[1;37m• \033[1;37mALTERAR NOME DA LOGO \033[1;32m                                  \033[1;37m┃"
+echo -e "\033[1;37m┃\033[1;31m[\033[1;36m01\033[1;31m] \033[1;37m• \033[1;37mINSTALAR PAINEL SSH-NET      \033[1;32m(FINAL 03/05/2022)      \033[1;37m┃"
+echo -e "┃\033[1;31m[\033[1;36m02\033[1;31m] \033[1;37m• \033[1;37mATUALIZAR PAINEL SSH-NET   \033[1;31m           (BREVE)      \033[1;37m┃"
+echo -e "┃\033[1;31m[\033[1;36m03\033[1;31m] \033[1;37m• \033[1;37mALTERAR NOME DA LOGO \033[1;31m                                  \033[1;37m┃"
 echo -e "┃\033[1;31m[\033[1;36m04\033[1;31m] \033[1;37m• \033[1;37mRESTAURAR BANCO DE DADOS \033[1;31m                              \033[1;37m┃"
-echo -e "┃\033[1;31m[\033[1;36m05\033[1;31m] \033[1;37m• \033[1;37mREMOVER PAINEL \033[1;31m                                        \033[1;37m┃"
-echo -e "┃\033[1;31m[\033[1;36m06\033[1;31m] \033[1;37m• \033[1;37mBAIXAR ÚLTIMA VERSÃO DO PWEB \033[1;31m\033[1;32m            VERSÃO: $ver   \033[1;37m┃"
-echo -e "┃\033[1;31m[\033[1;36m07\033[1;31m] \033[1;37m• \033[1;37mMUDAR A SENHA ROOT \033[1;31m                                    \033[1;37m┃"
-echo -e "┃\033[1;31m[\033[1;36m08\033[1;31m] \033[1;37m• \033[1;37mBOT SSH-NET \033[1;31mBREVE                                     \033[1;37m┃"
-echo -e "┃\033[1;31m[\033[1;36m09\033[1;31m] \033[1;37m• \033[1;37mSPEED TEST \033[1;31m                                            \033[1;37m┃"
-echo -e "┃\033[1;31m[\033[1;36m10\033[1;31m] \033[1;37m• \033[1;37mAUTO EXECUÇÃO DO PWEB $autm                                \033[1;37m┃"
-echo -e "┃\033[1;31m[\033[1;36m11\033[1;31m] \033[1;37m• \033[1;37mREINICIAR VPS \033[1;31m                                         \033[1;37m┃"
+echo -e "┃\033[1;31m[\033[1;36m05\033[1;31m] \033[1;37m• \033[1;37mOTIMIZAR A PASTA HTML \033[1;31m(cuidado!!!)                     \033[1;37m┃"
+echo -e "┃\033[1;31m[\033[1;36m06\033[1;31m] \033[1;37m• \033[1;37mREMOVER PAINEL \033[1;31m                                        \033[1;37m┃"
+echo -e "┃\033[1;31m[\033[1;36m07\033[1;31m] \033[1;37m• \033[1;37mBAIXAR ÚLTIMA VERSÃO DO PWEB \033[1;31m                          \033[1;37m┃"
+echo -e "┃\033[1;31m[\033[1;36m08\033[1;31m] \033[1;37m• \033[1;37mMUDAR A SENHA ROOT \033[1;31m                                    \033[1;37m┃"
 echo -e "┃\033[1;31m[\033[1;36m00\033[1;31m] \033[1;37m• \033[1;37mSAIR \033[1;32m<\033[1;33m<\033[1;31m<\033[0m \033[0m                                              \033[1;37m┃"
 echo -e "\033[1;37m┣━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛\033[0m"
-echo -ne "\033[1;37m┗━┫\033[1;32mO QUE DESEJA FAZER \033[1;31m? "; read -r x
+echo -ne "\033[1;37m┗━┫\033[1;32mO QUE DESEJA FAZER \033[1;31m? : "; read -r x
 
 case "$x" in 
    1 | 01)
@@ -409,50 +187,29 @@ case "$x" in
    ;;
    5 | 05)
    clear
-   remove_painel
+   clean_htmlfolder
    exit;
    ;;
    6 | 06)
    clear
-   att_pweb
+   remove_painel
    exit;
    ;;
    7 | 07)
    clear
+   att_pweb
+   exit;
+   ;;
+   8 | 08)
+   clear
    senha_root
-   exit;
-   ;;
-    8 | 08)
-   clear
-   /opt/painel/painel
-   exit;
-   ;;
-    9 | 09)
-   clear
-   velocity
-   echo ""
-   echo -ne "\n\033[1;31mENTER \033[1;33mpara retornar ao \033[1;32mPWEB! \033[0m"; read
-   pweb
-   exit;
-   ;;
-    10 | 010)
-   clear
-   autoexec
-   exit;
-   ;;
-   11 | 011)
-   clear
-   echo ""
-   echo ""
-   echo -ne "\033[1;36mDESEJA REINICIAR [S/N]: \033[1;37m"; read x
-[[ $x = @(n|N) ]] && pweb
- time_reboot
    exit;
    ;;
    0 | 00)
    echo -e "\033[1;31mSaindo...\033[0m"
    sleep 2
    clear
+   exit
    exit;
    ;;
    *)
