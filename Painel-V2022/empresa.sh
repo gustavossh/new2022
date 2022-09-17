@@ -35,19 +35,19 @@ echo -e "\E[44;1;37m    NOME DA LOGO     \E[0m"
 echo ""
 echo -e "\E[44;1;37m    Aqui é definido o nome da logo     \E[0m"
 echo ""
-echo -e "                              \033[1;31mBy @jsinfinity\033[1;36m"
+echo -e "                              \033[1;31mBy @nandoslayer\033[1;36m"
 echo ""
 echo ""
 echo -e "\033[1;36m NOME ATUAL:\033[1;37m $empresaatual\033[0m"
 echo ""
-echo -ne "\033[1;32m INFORME O NOME DA SSH-NET\033[1;37m: "; read -r ssh-net
+echo -ne "\033[1;32m INFORME O NOME DA EMPRESA\033[1;37m: "; read -r empresa
 echo ""
 echo -e "   \033[1;32mOK\033[1;37m"
 echo ""
 clear
 #
 cd || exit
-sed -i "s;$empresaatual;$empresa;g" /var/www/html/ssh-net > /dev/null 2>&1
+sed -i "s;$empresaatual;$empresa;g" /var/www/html/empresa > /dev/null 2>&1
 sed -i "s;$empresaatual;$empresa;g" /var/www/html/home.php > /dev/null 2>&1
 sed -i "s;$empresaatual;$empresa;g" /var/www/html/index.php > /dev/null 2>&1
 sed -i "s;$empresaatual;$empresa;g" /var/www/html/login.php > /dev/null 2>&1
