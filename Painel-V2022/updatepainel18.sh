@@ -45,10 +45,10 @@ ln -fs /usr/share/zoneinfo/America/Sao_Paulo /etc/localtime > /dev/null 2>&1
 dpkg-reconfigure --frontend noninteractive tzdata > /dev/null 2>&1
 IP=$(wget -qO- ipv4.icanhazip.com)
 clear
-echo -e "\E[44;1;37m    ATUALIZANDO O PAINELWEB SSH-NET    \E[0m"
+echo -e "\E[44;1;37m    ATUALIZANDO O PAINELWEB SSH-NET PREMIUM     \E[0m"
 echo ""
 echo -e "                              \033[1;31mBy @jsinfinity\033[1;36m"
-echo -e "   JSINFINITY-SSH" | figlet
+echo -e "   GESTOR-SSH" | figlet
 echo ""
 clear
 #
@@ -58,7 +58,7 @@ echo ""
 echo -e "           \033[1;33m● \033[1;32mFINALIZANDO A ATUALIZAÇÃO, PODE DEMORAR \033[1;33m● \033[1;33mAGUARDE...\033[0m"
 cd /var/www/html || exit
 rm -rf * > /dev/null 2>&1
-wget https://github.com/gustavossh/new2022/raw/ntech/gestorssh/gestorssh18.zip > /dev/null 2>&1
+wget https://github.com/gustavonet/new2022/raw/ntech/gestorssh/gestorssh18.zip > /dev/null 2>&1
 sleep 1
 unzip -o gestorssh18.zip > /dev/null 2>&1
 rm -rf gestorssh18.zip index.html > /dev/null 2>&1
@@ -102,7 +102,7 @@ echo ""
 service apache2 restart > /dev/null 2>&1
 echo ""
 echo -e "                              \033[1;31mBy @jsinfinity\033[1;36m"
-echo -e "   GESTOR-SSH" | figlet
+echo -e "   SSH-NET PREMIUM" | figlet
 echo ""
 echo -e "\033[1;36m PAINELWEB DIGITE ESSE IP NO NAVEGADOR:\033[1;37m http://$IP/admin\033[0m"
 echo ""
