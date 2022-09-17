@@ -5,9 +5,9 @@ ln -fs /usr/share/zoneinfo/America/Sao_Paulo /etc/localtime > /dev/null 2>&1
 dpkg-reconfigure --frontend noninteractive tzdata > /dev/null 2>&1
 IP=$(wget -qO- ipv4.icanhazip.com)
 clear
-echo -e "\E[44;1;37m    INSTALAR PAINELWEB JSINFINITY-SSH     \E[0m" 
+echo -e "\E[44;1;37m    INSTALAR PAINELWEB SSH-NET PRÊMIUM     \E[0m" 
 echo ""
-echo -e "                 \033[1;31mBy @JSINFINITY\033[1;36m"
+echo -e "                 \033[1;31mBy @jsinfinity\033[1;36m"
 echo ""
 echo -ne "\n\033[1;32mDIGITE SUA SENHA\033[1;33m ROOT\033[1;37m: "; read -r senha
 echo -e "\n\033[1;36mINICIANDO INSTALAÇÃO \033[1;33mAGUARDE..."
@@ -108,9 +108,9 @@ sed -i "s;49875103u;$_key;g" /var/www/html/pages/system/config.php > /dev/null 2
 sed -i "s;localhost;$IP;g" /var/www/html/pages/system/config.php > /dev/null 2>&1
 clear
 sleep 1
-echo -e "\033[1;32m JSINFINITY-SSH INSTALADO COM SUCESSO!"
+echo -e "\033[1;32m SSH-NET PRÊMIUM INSTALADO COM SUCESSO!"
 echo ""
-echo -e "                 \033[1;31mBy @JSINFINITY\033[1;36m"
+echo -e "                 \033[1;31mBy @jsinfinity\033[1;36m"
 echo ""
 echo -e "\033[1;36m SEU PAINEL:\033[1;37m http://$IP/admin\033[0m"
 echo -e "\033[1;36m USUÁRIO:\033[1;37m admin\033[0m"
@@ -126,8 +126,8 @@ echo -e "\033[1;33m MAIS INFORMAÇÕES \033[1;31m(\033[1;36mTELEGRAM\033[1;31m):
 echo ""
 sed -i "s;upload_max_filesize = 2M;upload_max_filesize = 64M;g" /etc/php5/apache2/php.ini > /dev/null 2>&1
 sed -i "s;post_max_size = 8M;post_max_size = 64M;g" /etc/php5/apache2/php.ini > /dev/null 2>&1
-echo -e "\033[1;36m REINICIANDO\033[1;37m EM 50 SEGUNDOS\033[0m"
-sleep 50
+echo -e "\033[1;36m REINICIANDO\033[1;37m EM 20 SEGUNDOS\033[0m"
+sleep 20
 shutdown -r now
 cat /dev/null > ~/.bash_history && history -c
 clear
